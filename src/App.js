@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import 'antd/dist/antd.css'
+import {HashRouter as Router ,Route} from 'react-router-dom'
+import { Layout } from 'antd';
+import News from './componentss/News';
+import Home from './componentss/Home';
+import Users from './componentss/Users';
+import Menus from './componentss/Menu';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+const { Header, Sider, Content } = Layout;
+
+
+
+export default class App extends Component {
+  render() {
+    return (
+      <Router>
+        <Layout>
+            <Header style={{backgroundColor:'#001529'}}>
+              <Menus/>
+            </Header>
+          
+            <Content>
+                <Route path='/home' component={Home}/>
+                <Route path='/users' component={Users}/>
+                <Route path='/news' component={News}/>
+            </Content>
+        </Layout>
+
+      </Router>
+    )
+  }
 }
-
-export default App;
