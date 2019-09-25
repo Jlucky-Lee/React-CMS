@@ -3,9 +3,11 @@ import 'antd/dist/antd.css'
 import {HashRouter as Router ,Route} from 'react-router-dom'
 import { Layout } from 'antd';
 import Aside from '../Aside';
+import UserList from './UserList.js';
+import UserAdd from './UserAdd.js';
 
 
-const { Header, Sider, Content } = Layout;
+const {  Sider, Content } = Layout;
 let screenHeight= window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 export default class Users extends Component {
     constructor(props){
@@ -35,15 +37,14 @@ export default class Users extends Component {
     
         return (
             <Router>
-                <h1>user</h1>
+              
                <Layout>
-                <Sider style={{height:screenHeight + 'px'}}>
+                <Sider style={{height:screenHeight + 'px',backgroundColor:'white'}}>
                   <Aside  menulist={this.state.menulist}/>
                 </Sider>
-                <Content>
-               
-                <Route path='/users' component={Users}/>
-                
+                <Content style={{backgroundColor:'#ccc'}}>
+               <Route path='/users/useradd' component={UserAdd}/>
+               <Route path='/users/userlist'  component={UserList}/>
                 </Content>
             </Layout>
             </Router>

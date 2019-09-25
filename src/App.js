@@ -8,8 +8,7 @@ import Users from './componentss/Users';
 import Menus from './componentss/Menu';
 
 
-const { Header, Sider, Content } = Layout;
-
+const { Header, Content } = Layout;
 
 
 export default class App extends Component {
