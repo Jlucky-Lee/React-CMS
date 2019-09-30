@@ -1,41 +1,57 @@
 import React, { Component } from 'react'
-import {
-    Form,
-    Input,
-    Icon,
-    Button,
-    PageHeader
-} from 'antd';
-// import { userInfo } from 'os';
+
+import {Form,Input,Icon,Button,PageHeader} from 'antd';
+// 使用提示框，防止用户误操作
+import {Prompt} from 'react-router-dom'
+import {getUUID} from '../../utils/UUID';
+import UserConst from '../../const/store'
+
 
 
 
 class AddUser extends Component {
+    constructor(props){
+        super(props)
+        this.state={
+            showModel:false
+        }
+    }
     handleSubmit = (e) =>{
-        let un=this.userName.state;
-        let ei=this.Mail.state;
-        let pw=this.Pwd.state;
-        if(un ==="" || ei === "" || pw === ""){
-             e.preventDefault();
-             window.alert('请输入合法的信息！');
-             return;
-        }
-        
-        var userDataObj=localStorage.getItem('userinfo') ? JSON.parse(localStorage.getItem('userinfo')) : [];
-        let userinfo={
-           id:Math.random(),
-           userName:un,
-           password:pw,
-           email:ei
-        }
-        userDataObj.push(userInfo);
-       localStorage.setItem("userinfo", JSON.stringify(userDataObj));
        
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (err) {
+              return;
+            }
+            console.log(values);
+
+            let key = UserConst.LOCAL_USER_STORE_KEY;
+            var userDataObj = localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key)) : [];
+            var userInfos = {
+                id: getUUID(),
+                userName: values.username,
+                password: values.password,
+                email: values.email
+            }
+            userDataObj.push(userInfos);
+            localStorage.setItem(key, JSON.stringify(userDataObj));
+            //TODO :添加完毕应该清楚输如框的内容
+
+          });
+         
+     
     }
     
    
     render() {
         const { getFieldDecorator } = this.props.form;
+
+        // 如果在表单有内容的时候再切换别的内容的弹出提示框
+
+        <prompt 
+        when={this.state.showModel}
+        message={'你确定要离开吗？'}
+        />
         return (
             // <h3>用户</h3>
             <div style={{backgroundColor:'white',width:'60%', padding:'50px 0' , margin: '20px auto' ,borderRadius:'5px'}}>
@@ -70,8 +86,9 @@ class AddUser extends Component {
                             rules: [{ required: true, message: 'Please input your password!' }],
                         })(
                             <Input
-                                prefix={<Icon type="key" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                 placeholder="Password"
+                                type="password"
                                 ref={ref=>this.Pwd=ref}
                             />,
                         )}

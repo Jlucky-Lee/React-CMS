@@ -44,6 +44,11 @@ export default class Menus extends Component {
           <NavLink to='/news' style={{display:'inline-block'}}>新闻管理</NavLink>
         </Menu.Item>
 
+        <Menu.Item key="login">
+          <Icon type="setting" />
+          <NavLink to='/login' style={{display:'inline-block'}}>用户登录</NavLink>
+        </Menu.Item>
+
       </Menu>
 
     </div>

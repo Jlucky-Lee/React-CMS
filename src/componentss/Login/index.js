@@ -1,20 +1,40 @@
 import React from "react"
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
-
-export default class Login extends React.Component {
+import { Form, Icon, Input, Button, Checkbox,PageHeader } from 'antd';
+import UserConst from '../../const/store'
+ class UserLogin extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
+
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+      
+        let userkey =UserConst.LOCAL_USER_STORE_KEY;
+        var userDataObj=localStorage.getItem(userkey) ? JSON.parse(localStorage.getItem(userkey)) : [];
+        
+          var obj=userDataObj.find(ele =>{
+            return ele.userName === values.username && ele.password === values.password
+          })
+
+          if(obj){
+           let key =UserConst.LOCAL_USER_TOKEN_KEY;
+           localStorage.setItem(key , values.username)
+           
+          }
+          else{
+            window.alert('login fail!!!')
+            return;
+          }
+        
       }
     });
   };
 
-  render() {
+  render() { 
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
+      <div style={{width:"60%",margin:"50px auto"}}>
+      <PageHeader title="用户登录" />
+      <Form onSubmit={this.handleSubmit} >
         <Form.Item>
           {getFieldDecorator('username', {
             rules: [{ required: true, message: 'Please input your username!' }],
@@ -41,17 +61,17 @@ export default class Login extends React.Component {
             valuePropName: 'checked',
             initialValue: true,
           })(<Checkbox>Remember me</Checkbox>)}
-          <a className="login-form-forgot" href="">
-            Forgot password
-          </a>
+          
           <Button type="primary" htmlType="submit" className="login-form-button">
             Log in
           </Button>
         </Form.Item>
       </Form>
+      </div>
     );
   }
 }
-
+const Login = Form.create({ name: 'login-form' })(UserLogin);
+export default Login
 
 

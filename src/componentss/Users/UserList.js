@@ -1,51 +1,45 @@
 import React, { Component } from 'react'
-import { Table } from 'antd';
+import { Table ,Button} from 'antd';
+import UserConst from '../../const/store'
 const { Column } = Table;
 
-const data = [
-    {
-      key: '1',
-      firstName: 'John',
-      address: 'New York No. 1 Lake Park',
-      email:'765657@qq.com'
-    },
-    {
-      key: '2',
-      firstName: 'Jim',
-      address: 'London No. 1 Lake Park',
-      email:'gogrey@126.com'
-    },
-    {
-      key: '3',
-      firstName: 'Joe',
-      address: 'Sidney No. 1 Lake Park',
-      email:'gopink@126.com'
-    },
-  ];
-  let screenHeight= window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+let screenHeight= window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 export default class UserList extends Component {
-
-    
+    constructor(props){
+      super(props)
+      this.state={
+        userList:[]
+      }
+    }
+    componentDidMount(){
+      let key =UserConst.LOCAL_USER_STORE_KEY;
+      //获取本都数据库的内容是异步的
+      var userDataObj=localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key)) : [];
+      this.setState({
+        userList:userDataObj
+      })
+    }
     render() {
         return (
-            <Table dataSource={data} style={{backgroundColor:'white',height:screenHeight + 'px',}}>
+            <Table dataSource={this.state.userList} style={{backgroundColor:'white',height:screenHeight + 'px',}}>
+      
+              <Column title="ID" dataIndex="id" key="key" />
+                <Column title="用户名" dataIndex="userName" key="firstName" />
+                
+                <Column title="邮箱" dataIndex="email" key="email" />
+                
+              <Column
+                title="操作"
+                key="action"
+                render={(text, record) => (
+                  <span>
+                    {/* <Divider type="vertical" /> */}
+                    <Button type="danger">删除</Button>
+                  </span>
+                )}
+              />
            
-              <Column title="ID" dataIndex="key" key="key" />
-              <Column title="姓名" dataIndex="firstName" key="firstName" />
-              
-              <Column title="邮箱" dataIndex="email" key="email" />
-              <Column title="住址" dataIndex="address" key="address" />
-           
-            <Column
-              title="操作"
-              key="action"
-              render={(text, record) => (
-                <span>
-                  {/* <Divider type="vertical" /> */}
-                  <button>删除</button>
-                </span>
-              )}
-            />
+          
           </Table>
         )
     }
